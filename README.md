@@ -64,7 +64,69 @@
 | 7  | 	Blaze   | 	Horse  | 	2016-02-29 | 	Trot, Jump, Gallop     |
 | 8  | 	Sahara  | 	Camel  | 	2015-08-14 | 	Walk, Run              |
 
+```sql
+# Создание базы данных
+CREATE SCHEMA `human_friends` ;
 
+# Создание и заполнение таблицы Pets
+CREATE TABLE `human_friends`.`pets` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `type` VARCHAR(45) NOT NULL,
+  `birthday` DATE NOT NULL,
+  `commands` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`));
+
+INSERT INTO pets (id, name,type,birthday,commands) VALUES
+(1, "Fido", "Dog", date("2020-01-01"), "Sit, Stay, Fetch"),
+(2, "Whiskers", "Cat", date("2019-05-15"), "Sit, Pounce"),
+(3, "Hammy", "Hamster", date("2021-03-10"), "Roll, Hide"),
+(4, "Buddy", "Dog", date("2018-12-10"), "Sit, Paw, Bark"),
+(5, "Smudge", "Cat", date("2020-02-20"), "Sit, Pounce, Scratch"),
+(6, "Peanut", "Hamster", date("2021-08-01"), "Roll, Spin"),
+(7, "Bella", "Dog", date("2019-11-11"), "Sit, Stay, Roll"),
+(8, "Oliver", "Cat", date("2020-06-30"), "Meow, Scratch, Jump");
+
+# Создание и заполнение таблицы pack_animals
+CREATE TABLE `human_friends`.`pack_animals` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `type` VARCHAR(45) NOT NULL,
+  `birthday` DATE NOT NULL,
+  `commands` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`));
+  
+INSERT INTO pack_animals (id, name,type,birthday,commands) VALUES
+(1, "Thunder", "Horse", date("2015-07-21"), "Trot, Canter, Gallop"),
+(2, "Sandy", "Camel", date("2016-11-03"), "Walk, Carry Load"),
+(3, "Eeyore", "Donkey", date("2017-09-18"), "Walk, Carry Load, Bray"),
+(4, "Storm", "Horse", date("2014-05-05"), "Trot, Canter"),
+(5, "Dune", "Camel", date("2018-12-12"), "Walk, Sit"),
+(6, "Burro", "Donkey", date("2019-01-23"), "Walk, Bray, Kick"),
+(7, "Blaze", "Horse", date("2016-02-29"), "Trot, Jump, Gallop"),
+(8, "Sahara", "Camel", date("2015-08-14"), "Walk, Run");
+
+# Удаление всех верблюдов
+DELETE FROM pack_animals pa WHERE pa.type = "Camel";
+
+#Создать новую таблицу для животных в возрасте от 1 до 3 лет и вычислить их возраст с точностью до месяца.
+CREATE TABLE yong_animals(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(25),
+age INT);
+
+INSERT INTO yong_animals (name, age)
+    SELECT name, TIMESTAMPDIFF(MONTH, birthday, CURDATE()) AS age_months
+    FROM pets
+    WHERE TIMESTAMPDIFF(MONTH, birthday, CURDATE()) BETWEEN 12 AND 3 * 12
+    UNION ALL
+    SELECT name, TIMESTAMPDIFF(MONTH, birthday, CURDATE()) AS age_months
+    FROM pack_animals
+    WHERE TIMESTAMPDIFF(MONTH, birthday, CURDATE()) BETWEEN 12 AND 3 * 12;
+    
+# Объединить все созданные таблицы в одну, сохраняя информацию о принадлежности к исходным таблицам.
+SELECT * FROM pets UNION ALL SELECT * FROM pack_animals;
+```
 
 
 ## 8. ООП и Java
